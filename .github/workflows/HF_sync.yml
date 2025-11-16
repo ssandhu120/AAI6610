@@ -1,0 +1,32 @@
+name: Sync to HuggingFace Space
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  sync-to-hf:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git user (required for pushing)
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+      - name: Push to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          # Set or update the 'space' remote
+          git remote add space https://ssandhu20:${HF_TOKEN}@huggingface.co/spaces/ssandhu20/AAI6610 2>/dev/null || \
+          git remote set-url space https://ssandhu20:${HF_TOKEN}@huggingface.co/spaces/ssandhu20/AAI6610
+
+          # Force-push main to the Space (overwrites Space history with this repo)
+          git push --force space main
