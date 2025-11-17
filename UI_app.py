@@ -2,7 +2,7 @@
 import gradio as gr
 import pandas as pd
 
-from sklearn.datasets import fetch_openml
+from ucimlrepo import fetch_ucirepo
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
@@ -40,14 +40,19 @@ FEATURES = [
 
 def load_credit_default_data():
     """
-    Load the Yeh & Lien (2009) credit default dataset from OpenML.
-    This is the same as the UCI 'Default of Credit Card Clients' dataset.
+    Load the Yeh (2009) 'Default of Credit Card Clients' dataset from UCI via ucimlrepo.
+    This returns X (features) and y (target) separately.
     """
-    ds = fetch_openml(data_id=42477, as_frame=True)
-    df = ds.frame.copy()
+    dataset = fetch_ucirepo(id=350)  # Default of Credit Card Clients
 
-    y = df["default.payment.next.month"].astype(int)
-    X = df.drop(columns=["ID", "default.payment.next.month"], errors="ignore")
+    # data as pandas DataFrames
+    X = dataset.data.features
+    y = dataset.data.targets.squeeze().astype(int)
+
+    # Optionally drop ID column if present
+    if "ID" in X.columns:
+        X = X.drop(columns=["ID"])
+
     return X, y
 
 
@@ -90,7 +95,7 @@ def build_pipeline(X):
 
 def train_model():
     """Train the tuned LightGBM pipeline once at startup."""
-    print("Loading credit default dataset from OpenML...")
+    print("Loading credit default dataset from UCI (ucimlrepo)...")
     X, y = load_credit_default_data()
 
     print("Building preprocessing + LightGBM pipeline...")
@@ -201,8 +206,4 @@ demo = gr.Interface(
     inputs=inputs,
     outputs=gr.JSON(label="Prediction"),
     title="Credit Default Risk – Tuned LightGBM",
-    description="Enter features from the credit-card default dataset to estimate probability of default next month.",
-)
-
-if __name__ == "__main__":
-    demo.launch()
+    description="Enter features from the credit-card default dataset to estimate probabilit
