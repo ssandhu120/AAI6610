@@ -1,6 +1,3 @@
-# AAI6610
-Intro to Machine Learning - Credit Risk Pipeline
-
 ---
 title: Credit Default Risk – AAI6610
 colorFrom: yellow
