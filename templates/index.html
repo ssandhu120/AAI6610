@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Credit Default Prediction</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 1rem;
+      }
+      h1 {
+        margin-bottom: 0.5rem;
+      }
+      form {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+      label {
+        display: flex;
+        flex-direction: column;
+        font-size: 0.9rem;
+      }
+      input {
+        padding: 0.25rem 0.4rem;
+        margin-top: 0.2rem;
+      }
+      button {
+        grid-column: 1 / -1;
+        padding: 0.6rem 1rem;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      .result {
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        background: #f6f8fb;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Credit Default Prediction</h1>
+    <p>Enter customer information to estimate the probability of default next month.</p>
+
+    <form method="post" action="/predict-form">
+      <label>
+        LIMIT_BAL
+        <input type="number" name="LIMIT_BAL" step="1000" required />
+      </label>
+      <label>
+        SEX (1=male, 2=female)
+        <input type="number" name="SEX" min="1" max="2" required />
+      </label>
+      <label>
+        EDUCATION
+        <input type="number" name="EDUCATION" required />
+      </label>
+      <label>
+        MARRIAGE
+        <input type="number" name="MARRIAGE" required />
+      </label>
+      <label>
+        AGE
+        <input type="number" name="AGE" required />
+      </label>
+      <label>
+        PAY_0
+        <input type="number" name="PAY_0" required />
+      </label>
+      <label>
+        PAY_2
+        <input type="number" name="PAY_2" required />
+      </label>
+      <label>
+        PAY_3
+        <input type="number" name="PAY_3" required />
+      </label>
+      <label>
+        PAY_4
+        <input type="number" name="PAY_4" required />
+      </label>
+      <label>
+        PAY_5
+        <input type="number" name="PAY_5" required />
+      </label>
+      <label>
+        PAY_6
+        <input type="number" name="PAY_6" required />
+      </label>
+      <label>
+        BILL_AMT1
+        <input type="number" name="BILL_AMT1" step="100" required />
+      </label>
+      <label>
+        BILL_AMT2
+        <input type="number" name="BILL_AMT2" step="100" required />
+      </label>
+      <label>
+        BILL_AMT3
+        <input type="number" name="BILL_AMT3" step="100" required />
+      </label>
+      <label>
+        BILL_AMT4
+        <input type="number" name="BILL_AMT4" step="100" required />
+      </label>
+      <label>
+        BILL_AMT5
+        <input type="number" name="BILL_AMT5" step="100" required />
+      </label>
+      <label>
+        BILL_AMT6
+        <input type="number" name="BILL_AMT6" step="100" required />
+      </label>
+      <label>
+        PAY_AMT1
+        <input type="number" name="PAY_AMT1" step="100" required />
+      </label>
+      <label>
+        PAY_AMT2
+        <input type="number" name="PAY_AMT2" step="100" required />
+      </label>
+      <label>
+        PAY_AMT3
+        <input type="number" name="PAY_AMT3" step="100" required />
+      </label>
+      <label>
+        PAY_AMT4
+        <input type="number" name="PAY_AMT4" step="100" required />
+      </label>
+      <label>
+        PAY_AMT5
+        <input type="number" name="PAY_AMT5" step="100" required />
+      </label>
+      <label>
+        PAY_AMT6
+        <input type="number" name="PAY_AMT6" step="100" required />
+      </label>
+
+      <button type="submit">Predict Default Risk</button>
+    </form>
+
+    {% if prediction is not none %}
+      <div class="result">
+        <p><strong>Prediction:</strong> {{ prediction }}</p>
+        <p><strong>Probability of default:</strong> {{ probability }}</p>
+      </div>
+    {% endif %}
+  </body>
+</html>
