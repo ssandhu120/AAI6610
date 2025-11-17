@@ -206,4 +206,8 @@ demo = gr.Interface(
     inputs=inputs,
     outputs=gr.JSON(label="Prediction"),
     title="Credit Default Risk – Tuned LightGBM",
-    description="Enter features from the credit-card default dataset to estimate probabilit
+    description="Enter features from the credit-card default dataset to estimate probability of default next month.",
+)
+
+if __name__ == "__main__":
+    demo.launch()
