@@ -1,4 +1,4 @@
-# Dockerfile for Hugging Face Docker Space (using FastAPI backend)
+# Dockerfile for Hugging Face Docker Space (FastAPI API, no UI)
 
 FROM python:3.10-slim
 
@@ -8,18 +8,19 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# Install system deps (optional, keep minimal)
+# Install system dependencies (including libgomp for LightGBM)
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python deps
+# Install Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Copy application code into the container
 COPY . .
 
-# Expose the port Hugging Face will route to (matches app_port in README)
+# Expose the port FastAPI listens on (matches app_port in README)
 EXPOSE 7860
 
 # Start FastAPI app with uvicorn
