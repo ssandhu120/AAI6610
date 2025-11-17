@@ -41,19 +41,30 @@ FEATURES = [
 def load_credit_default_data():
     """
     Load the Yeh (2009) 'Default of Credit Card Clients' dataset from UCI via ucimlrepo.
-    This returns X (features) and y (target) separately.
+    This returns X (features) and y (target) with meaningful column names that match FEATURES.
     """
     dataset = fetch_ucirepo(id=350)  # Default of Credit Card Clients
 
-    # data as pandas DataFrames
-    X = dataset.data.features
+    # Raw data as pandas DataFrames
+    X_raw = dataset.data.features.copy()
     y = dataset.data.targets.squeeze().astype(int)
 
-    # Optionally drop ID column if present
-    if "ID" in X.columns:
-        X = X.drop(columns=["ID"])
+    # If there is an extra ID-like column, drop it so we end up with 23 feature columns
+    X = X_raw.copy()
+    if X.shape[1] == len(FEATURES) + 1:
+        # assume first column is ID / index-like
+        X = X.iloc[:, 1:].copy()
+
+    # Rename columns to the FEATURE names we use in the UI
+    if X.shape[1] == len(FEATURES):
+        X.columns = FEATURES
+    else:
+        # As a fallback, just keep whatever columns X has;
+        # but for this dataset, we expect X to have 23 columns.
+        print(f"Warning: expected {len(FEATURES)} features, got {X.shape[1]}")
 
     return X, y
+
 
 
 def build_pipeline(X):
