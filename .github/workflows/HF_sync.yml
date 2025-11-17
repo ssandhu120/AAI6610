@@ -13,16 +13,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Sync to Hugging Face Space
+        uses: huggingface/space-sync@v0.4.0
         with:
-          python-version: "3.10"
-
-      - name: Install Space sync dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install "huggingface_hub[cli]>=0.23.0"
-
-      - name: Configure git user
-        run: |
-          git con
+          # This is the GitHub token for reading the repo
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          # This is your Hugging Face access token (you must create this secret)
+          hf-token: ${{ secrets.HF_TOKEN }}
+          # Your Space ID: <username>/<space_name>
+          space-id: "ssandhu20/AAI6610"
