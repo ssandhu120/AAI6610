@@ -1,24 +1,30 @@
-name: CD - Sync to Hugging Face Space
+name: CD - Sync Hugging Face Space
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
-  deploy-to-space:
+  sync:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Sync to Hugging Face Space
-        uses: huggingface/space-sync@v0.4.0
-        with:
-          # This is the GitHub token for reading the repo
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          # This is your Hugging Face access token (you must create this secret)
-          hf-token: ${{ secrets.HF_TOKEN }}
-          # Your Space ID: <username>/<space_name>
-          space-id: "ssandhu20/AAI6610"
+      - name: Configure git
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Add Hugging Face Space remote
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git remote remove space || true
+          git remote add space https://ssandhu20:${HF_TOKEN}@huggingface.co/spaces/ssandhu20/AAI6610
+
+      - name: Push to Hugging Face Space
+        run: |
+          git push space main --force
