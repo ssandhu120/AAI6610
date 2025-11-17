@@ -3,7 +3,6 @@ title: Credit Default Risk – AAI6610
 colorFrom: yellow
 colorTo: red
 sdk: gradio
-sdk_version: "5.0.0"
 app_file: UI_app.py
 pinned: false
 ---
