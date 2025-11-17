@@ -1,11 +1,19 @@
-gradio>=5.7.1
 huggingface-hub>=1.0.0
 spaces>=0.42.1
 uvicorn>=0.14.0
 
-scikit-learn
-pandas
 numpy
 joblib
+fastapi
+pandas
+numpy
+scikit-learn
 lightgbm
 ucimlrepo
+xgboost
+catboost
+tensorflow
+torch
+transformers
+datasets
+

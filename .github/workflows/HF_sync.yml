@@ -1,4 +1,4 @@
-name: Sync to HuggingFace Space
+name: CD - Sync to Hugging Face Space
 
 on:
   push:
@@ -6,27 +6,23 @@ on:
   workflow_dispatch:
 
 jobs:
-  sync-to-hf:
+  deploy-to-space:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          fetch-depth: 0
+          python-version: "3.10"
 
-      - name: Configure git user (required for pushing)
+      - name: Install Space sync dependencies
         run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
+          python -m pip install --upgrade pip
+          pip install "huggingface_hub[cli]>=0.23.0"
 
-      - name: Push to Hugging Face Space
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      - name: Configure git user
         run: |
-          # Set or update the 'space' remote
-          git remote add space https://ssandhu20:${HF_TOKEN}@huggingface.co/spaces/ssandhu20/AAI6610 2>/dev/null || \
-          git remote set-url space https://ssandhu20:${HF_TOKEN}@huggingface.co/spaces/ssandhu20/AAI6610
-
-          # Force-push main to the Space (overwrites Space history with this repo)
-          git push --force space main
+          git con
