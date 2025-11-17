@@ -1,4 +1,4 @@
-name: CD - Sync Hugging Face Space
+name: CD - Sync HuggingFace Space
 
 on:
   push:
@@ -10,8 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repository (full history, not shallow)
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Configure git
         run: |
@@ -27,4 +29,5 @@ jobs:
 
       - name: Push to Hugging Face Space
         run: |
-          git push space main --force
+          # Push current HEAD to main on the Space, with full history
+          git push space HEAD:main --force
