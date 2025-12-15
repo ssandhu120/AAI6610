@@ -20,6 +20,7 @@ There is **no UI**; interaction is done through HTTP requests.
 ### `GET /health`
 Returns API health status.
 
+
 ### `POST /predict`
 Send a JSON body containing the required feature values to receive:
 - Predicted class (0/1)
